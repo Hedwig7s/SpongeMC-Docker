@@ -20,7 +20,7 @@ RUN microdnf install -y epel-release &&\
 
 RUN chmod +x /main.sh
 
-RUN adduser -D purpur
+RUN useradd purpur
 USER purpur
 
 CMD ["/main.sh"]
