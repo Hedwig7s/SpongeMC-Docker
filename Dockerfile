@@ -1,6 +1,7 @@
 FROM ghcr.io/graalvm/jdk-community:21
 
 EXPOSE 25565/tcp
+EXPOSE 8100/tcp
 
 ENV MC_VERSION 1.20.1
 ENV MC_EULA true
