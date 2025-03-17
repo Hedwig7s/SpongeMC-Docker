@@ -38,9 +38,6 @@ GetFile "https://maven.fabricmc.net/net/fabricmc/fabric-installer/$FABRIC_INSTAL
 [ $? -eq 0 ] && java -jar "$MCDIR/fabric-installer.jar" server ${MC_VERSION:+-mcversion "$MC_VERSION"}${MC_VERSION:-""} -dir "$MCDIR" -downloadMinecraft ${FABRIC_VERSION:+-loader "$FABRIC_VERSION"}${FABRIC_VERSION:-""}
 [ $? -eq 0 ] && rm "$MCDIR/fabric-installer.jar"
 
-# Cleaning jars that are not needed
-find "$MCDIR" -maxdepth 1 -type f -name "*.jar" ! -wholename "$MCJAR" -exec rm {} +
-
 # Getting Server files from user
 GetFile "$MC_URL_ZIP_SERVER_FIILES" "$MCDIR/ZIP_SERVER_FILES"
 [ $? -eq 0 ] && unar "$MCDIR/ZIP_SERVER_FILES" -f
