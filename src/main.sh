@@ -16,7 +16,7 @@ MCDIR="/home/server"
 MCJAR="$MCDIR/fabric-server-launch.jar"
 MCTEMP="/server_tmp"
 MCARGS="-Xms$MC_RAM_XMS -Xmx$MC_RAM_XMX $MC_PRE_JAR_ARGS -jar $MCJAR $MC_POST_JAR_ARGS"     # -Xms<> -Xmx<> <args> -jar <jar> <args>
-: "${FABRIC_INSTALLVER:='1.0.1'}"
+: "${FABRIC_INSTALLVER:=1.0.1}"
 
 cd $MCDIR
 
