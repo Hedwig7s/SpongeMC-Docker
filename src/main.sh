@@ -8,16 +8,20 @@
 #MC_PRE_JAR_ARGS=""                 # ARG's before the JAR
 #MC_POST_JAR_ARGS=""                # ARG's after the JAR
 #MC_URL_ZIP_SERVER_FIILES=""        # Zip for all of the server files. Gets merged with the current Server Folder
+#FABRIC_INSTALLVER="1.0.1"          # Fabric Installer Version
+#FABRIC_VERSION=""                  # Fabric Loader Version
+#FORCE_INSTALL=""                   # Force the installation of the Fabric jar
 
 MCDIR="/home/server"
-MCJAR="$MCDIR/purpur_$MC_VERSION.jar"
+MCJAR="$MCDIR/fabric-server-launch.jar"
 MCTEMP="/server_tmp"
 MCARGS="-Xms$MC_RAM_XMS -Xmx$MC_RAM_XMX $MC_PRE_JAR_ARGS -jar $MCJAR $MC_POST_JAR_ARGS"     # -Xms<> -Xmx<> <args> -jar <jar> <args>
+: "${FABRIC_INSTALLVER:='1.0.1'}"
 
 cd $MCDIR
 
 echo "###############################################"
-echo "#   PurpurMC - `date`   #"
+echo "#   FabricMC - `date`   #"
 echo "###############################################"
 echo 
 echo "Initializing..."
@@ -29,8 +33,10 @@ function GetFile {
 }
 
 # Download the file even if it exits with "curl -C -" to be sure that it is complete
-[ ! -e $MCJAR ] && echo "Downloading Purpur jar..."
-GetFile "https://api.purpurmc.org/v2/purpur/$MC_VERSION/latest/download" $MCJAR
+[[ ! -e $MCJAR || $FORCE_INSTALL ]] && echo "Downloading Fabric jar..."
+GetFile "https://maven.fabricmc.net/net/fabricmc/fabric-installer/$FABRIC_INSTALLVER/fabric-installer-$FABRIC_INSTALLVER.jar" "$MCDIR/fabric-installer.jar"
+[ $? -eq 0 ] && java -jar "$MCDIR/fabric-installer.jar" server ${MC_VERSION:+-mcversion "$MC_VERSION"}${MC_VERSION:-""} -dir "$MCDIR" -downloadMinecraft ${FABRIC_VERSION:+-loader "$FABRIC_VERSION"}${FABRIC_VERSION:-""}
+[ $? -eq 0 ] && rm "$MCDIR/fabric-installer.jar"
 
 # Cleaning jars that are not needed
 find "$MCDIR" -maxdepth 1 -type f -name "*.jar" ! -wholename "$MCJAR" -exec rm {} +
