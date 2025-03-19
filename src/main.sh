@@ -33,10 +33,14 @@ function GetFile {
 }
 
 # Download the file even if it exits with "curl -C -" to be sure that it is complete
-[[ ! -e $MCJAR || $FORCE_INSTALL ]] && echo "Downloading Fabric jar..."
-GetFile "https://maven.fabricmc.net/net/fabricmc/fabric-installer/$FABRIC_INSTALLVER/fabric-installer-$FABRIC_INSTALLVER.jar" "$MCDIR/fabric-installer.jar"
-java -jar "$MCDIR/fabric-installer.jar" server ${MC_VERSION:+-mcversion "$MC_VERSION"} -dir "$MCDIR" -downloadMinecraft ${FABRIC_VERSION:+-loader "$FABRIC_VERSION"}
-[ $? -eq 0 ] && rm "$MCDIR/fabric-installer.jar"
+if [[ ! -e $MCJAR || -n $FORCE_INSTALL ]]; then
+    echo "Downloading and installing Fabric..."
+    GetFile "https://maven.fabricmc.net/net/fabricmc/fabric-installer/$FABRIC_INSTALLVER/fabric-installer-$FABRIC_INSTALLVER.jar" "$MCDIR/fabric-installer.jar"
+    java -jar "$MCDIR/fabric-installer.jar" server ${MC_VERSION:+-mcversion "$MC_VERSION"} -dir "$MCDIR" -downloadMinecraft ${FABRIC_VERSION:+-loader "$FABRIC_VERSION"}
+    if [[ $? -eq 0 ]]; then
+        rm "$MCDIR/fabric-installer.jar"
+    fi
+fi
 
 # Getting Server files from user
 GetFile "$MC_URL_ZIP_SERVER_FIILES" "$MCDIR/ZIP_SERVER_FILES"
