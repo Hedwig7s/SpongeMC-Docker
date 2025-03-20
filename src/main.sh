@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #* All Arguments Supportet
-#MC_VERSION="1.19.2"                # Minecraft Server version
+#MC_VERSION="1.21.3"                # Minecraft Server version
 #MC_EULA="true"                     # Minecraft's Eula
 #MC_RAM_XMS="1536M"                 # Preallocated RAM
 #MC_RAM_XMX="2048M"                 # Max RAM
@@ -9,12 +9,12 @@
 #MC_POST_JAR_ARGS=""                # ARG's after the JAR
 #MC_URL_ZIP_SERVER_FIILES=""        # Zip for all of the server files. Gets merged with the current Server Folder
 #SPONGE_TYPE="spongevanilla"        # Sponge type
-#SPONGE_VERSION="1.21.3-13.0.0"     # Sponge version
+#SPONGE_VERSION="13.0.0"     # Sponge version
 #FORCE_INSTALL=""                   # Force the installation of the sponge jar
 : "${SPONGE_TYPE:=spongevanilla}"
-: "${SPONGE_VERSION:=1.21.3-13.0.0}"
+: "${SPONGE_VERSION:=13.0.0}"
 MCDIR="/home/server"
-MCJAR="$MCDIR/$SPONGE_TYPE-$SPONGE_VERSION-universal.jar"
+MCJAR="$MCDIR/$SPONGE_TYPE-$MC_VERSION-$SPONGE_VERSION-universal.jar"
 MCTEMP="/server_tmp"
 MCARGS="-Xms$MC_RAM_XMS -Xmx$MC_RAM_XMX --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 $MC_PRE_JAR_ARGS -jar $MCJAR $MC_POST_JAR_ARGS --nogui"     # -Xms<> -Xmx<> <args> -jar <jar> <args>
 
@@ -35,8 +35,11 @@ function GetFile {
 # Download the file even if it exits with "curl -C -" to be sure that it is complete
 if [[ ! -e $MCJAR || -n $FORCE_INSTALL ]]; then
     echo "Downloading and installing Ŝponge..."
-    GetFile "https://repo.spongepowered.org/repository/maven-releases/org/spongepowered/$SPONGE_TYPE/$SPONGE_VERSION/$SPONGE_TYPE-$SPONGE_VERSION-universal.jar" "$MCJAR"
+    GetFile "https://repo.spongepowered.org/repository/maven-releases/org/spongepowered/$SPONGE_TYPE/$MC_VERSION-$SPONGE_VERSION/$SPONGE_TYPE-$MC_VERSION-$SPONGE_VERSION-universal.jar" "$MCJAR"
 fi
+
+# Cleaning jars that are not needed
+find "$MCDIR" -maxdepth 1 -type f -name "*.jar" ! -wholename "$MCJAR" -exec rm {} +
 
 # Getting Server files from user
 GetFile "$MC_URL_ZIP_SERVER_FIILES" "$MCDIR/ZIP_SERVER_FILES"
