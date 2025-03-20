@@ -1,6 +1,6 @@
-# FabricMC-Docker
+# SpongeMC-Docker
 
-Docker image running [FabricMC](https://fabricmc.net/)
+Docker image running [SpongeMC](https://spongepowered.org/)
 
 ## Usage
 
@@ -26,6 +26,6 @@ All of the Environment Variables:
 | MC_URL_ZIP_SERVER_FILES | `<URL to archive(zip, rar, tar, ...)>` | Import files from another Server or Import Config's/Plugin's (for experienced User's only) |
 | MC_URL_ZIP_SERVER_FILES | `<URL to archive(zip, rar, tar, ...)>` | Import files from another Server or Import Config's/Plugin's (for experienced User's only) |
 | MC_URL_ZIP_SERVER_FILES | `<URL to archive(zip, rar, tar, ...)>` | Import files from another Server or Import Config's/Plugin's (for experienced User's only) |
-| FABRIC_VERSION | `<Fabric version>` | Fabric version to use |
-| FABRIC_INSTALLVER | `` | Fabric installer version to use |
+| SPONGE_TYPE | `spongevanilla` | Which sponge type to get (one of spongevanilla,spongeforge,spongeneo |
+| SPONGE_VERSION | `1.21.3-13.0.0` | Which sponge version to get |
 | FORCE_INSTALL | `<Should force install>` | Install whether the jar exists or not. Leave empty to update when jar is missing |
