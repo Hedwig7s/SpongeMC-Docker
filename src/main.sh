@@ -8,15 +8,15 @@
 #MC_PRE_JAR_ARGS=""                 # ARG's before the JAR
 #MC_POST_JAR_ARGS=""                # ARG's after the JAR
 #MC_URL_ZIP_SERVER_FIILES=""        # Zip for all of the server files. Gets merged with the current Server Folder
-#FABRIC_INSTALLVER="1.0.1"          # Fabric Installer Version
-#FABRIC_VERSION=""                  # Fabric Loader Version
-#FORCE_INSTALL=""                   # Force the installation of the Fabric jar
-
+#SPONGE_TYPE="spongevanilla"        # Sponge type
+#SPONGE_VERSION="1.21.3-13.0.0"     # Sponge version
+#FORCE_INSTALL=""                   # Force the installation of the sponge jar
+: "${SPONGE_TYPE:=spongevanilla}"
+: "${SPONGE_VERSION:=1.21.3-13.0.0}"
 MCDIR="/home/server"
-MCJAR="$MCDIR/fabric-server-launch.jar"
+MCJAR="$MCDIR/$SPONGE_TYPE-$SPONGE_VERSION-universal.jar"
 MCTEMP="/server_tmp"
 MCARGS="-Xms$MC_RAM_XMS -Xmx$MC_RAM_XMX --add-modules=jdk.incubator.vector -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 $MC_PRE_JAR_ARGS -jar $MCJAR $MC_POST_JAR_ARGS --nogui"     # -Xms<> -Xmx<> <args> -jar <jar> <args>
-: "${FABRIC_INSTALLVER:=1.0.1}"
 
 cd $MCDIR
 
@@ -34,12 +34,8 @@ function GetFile {
 
 # Download the file even if it exits with "curl -C -" to be sure that it is complete
 if [[ ! -e $MCJAR || -n $FORCE_INSTALL ]]; then
-    echo "Downloading and installing Fabric..."
-    GetFile "https://maven.fabricmc.net/net/fabricmc/fabric-installer/$FABRIC_INSTALLVER/fabric-installer-$FABRIC_INSTALLVER.jar" "$MCDIR/fabric-installer.jar"
-    java -jar "$MCDIR/fabric-installer.jar" server ${MC_VERSION:+-mcversion "$MC_VERSION"} -dir "$MCDIR" -downloadMinecraft ${FABRIC_VERSION:+-loader "$FABRIC_VERSION"}
-    if [[ $? -eq 0 ]]; then
-        rm "$MCDIR/fabric-installer.jar"
-    fi
+    echo "Downloading and installing Ŝponge..."
+    GetFile "https://repo.spongepowered.org/repository/maven-releases/org/spongepowered/$SPONGE_TYPE/$SPONGE_VERSION/$SPONGE_TYPE-$SPONGE_VERSION-universal.jar" "$MCJAR"
 fi
 
 # Getting Server files from user

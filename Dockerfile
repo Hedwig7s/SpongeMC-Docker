@@ -22,7 +22,7 @@ RUN microdnf install -y epel-release &&\
 
 RUN chmod +x /main.sh
 
-RUN useradd purpur
-USER purpur
+RUN useradd sponge
+USER sponge
 
 CMD ["/main.sh"]
